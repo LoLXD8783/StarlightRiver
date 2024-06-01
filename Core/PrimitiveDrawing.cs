@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace StarlightRiver.Core
 {
-	public class Primitives : IDisposable
+	public sealed class Primitives : IDisposable
 	{
 		private DynamicVertexBuffer vertexBuffer;
 		private DynamicIndexBuffer indexBuffer;
@@ -54,10 +54,20 @@ namespace StarlightRiver.Core
 
 		public void Dispose()
 		{
+			if (IsDisposed)
+				return;
 			IsDisposed = true;
 
 			vertexBuffer?.Dispose();
 			indexBuffer?.Dispose();
+			vertexBuffer = null;
+			indexBuffer = null;
+			GC.SuppressFinalize(this);
+		}
+
+		~Primitives()
+		{
+			Dispose();
 		}
 	}
 
