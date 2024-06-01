@@ -54,10 +54,20 @@ namespace StarlightRiver.Core
 
 		public void Dispose()
 		{
+			if (IsDisposed)
+				return;
 			IsDisposed = true;
-
+		
 			vertexBuffer?.Dispose();
 			indexBuffer?.Dispose();
+			vertexBuffer = null;
+			indexBuffer = null;
+			GC.SuppressFinalize(this);
+		}
+		
+		~Primitives()
+		{
+			Dispose();
 		}
 	}
 
